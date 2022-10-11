@@ -339,6 +339,7 @@ spark.createDataFrame(pd.concat([pd.DataFrame(X, columns=X.columns), pd.DataFram
 
 # COMMAND ----------
 
+spark.sql("""drop table if exists silver_fraud_shap_values""")
 spark.sql("""select t.*, 
        s.*
 from txns t join fraud_shap_values s 
