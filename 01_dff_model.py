@@ -344,8 +344,6 @@ spark.sql("""select t.*,
 from txns t join fraud_shap_values s 
 on t.id = s.shap_v_id""").write.format("delta").option('overwriteSchema', 'true').mode('overwrite').saveAsTable("silver_fraud_shap_values")
 
-spark.sql("ALTER TABLE silver_fraud_shap_values SET TBLPROPERTIES (delta.autoOptimize.optimizeWrite = true)")
-
 # COMMAND ----------
 
 # DBTITLE 1,Fraud Absolute Dollar Amounts - Predicted vs Actual Amount Lost
