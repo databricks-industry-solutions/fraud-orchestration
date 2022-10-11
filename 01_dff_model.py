@@ -224,13 +224,13 @@ conda_env['dependencies'][2]['pip'] += ['sklearn']
 # COMMAND ----------
 
 # DBTITLE 1,MLFlow Tracking and PyFunc Model Saving
-import json
-context = json.loads(dbutils.notebook.entry_point.getDbutils().notebook().getContext().toJson())
-experiment_name = context['extraContext']['notebook_path']
-experiment_id = mlflow.get_experiment_by_name(experiment_name).experiment_id
+import mlflow
+useremail = dbutils.notebook.entry_point.getDbutils().notebook().getContext().userName().get()
+experiment_name = f"/Users/{useremail}/dff_orchestrator"
+mlflow.set_experiment(experiment_name) 
 model_run_name = 'fraud-xgb-wrapper'
 
-with mlflow.start_run(experiment_id = experiment_id ) as run:
+with mlflow.start_run() as run:
   mlflow.log_param('Input-data-location', raw_data_path)
   from sklearn.model_selection import train_test_split
   X_train, X_test, y_train, y_test = train_test_split(data.drop(["FRD_IND"], axis=1), data["FRD_IND"], test_size=0.33, random_state=42)
