@@ -78,7 +78,7 @@ job_json = {
             {
                 "job_cluster_key": "fraud_orchestration_cluster",
                 "new_cluster": {
-                    "spark_version": "10.4.x-cpu-ml-scala2.12",
+                    "spark_version": "11.3.x-cpu-ml-scala2.12",
                 "spark_conf": {
                     "spark.databricks.delta.formatCheck.enabled": "false"
                     },
