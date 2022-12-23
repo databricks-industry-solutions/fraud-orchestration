@@ -15,8 +15,6 @@
 # MAGIC 
 # MAGIC The financial service industry (FSI) is rushing towards transformational change to support new channels and services, delivering transactional features and facilitating payments through new digital channels to remain competitive. Unfortunately, the speed and convenience that these capabilities afford is a benefit to consumers and fraudsters alike. Building a fraud framework often goes beyond just creating a highly accurate machine learning model due ever changing landscape and customer expectation. Oftentimes it involves a complex decision science setup which combines rules engine with a need for a robust and scalable machine learning platform. In this series of notebook, we'll be demonstrating how `Delta Lake`, `MLFlow` and a unified analytics platform can help organisations combat fraud more efficiently
 # MAGIC 
-# MAGIC This series of notebook is also available at https://www.databricks.com/solutions/accelerators/fraud-detection and https://github.com/databricks-industry-solutions/fraud-orchestration
-# MAGIC 
 # MAGIC ---
 # MAGIC + <a href="$./01_dff_model">STAGE1</a>: Integrating rule based with ML
 # MAGIC + <a href="$./02_dff_orchestration">STAGE2</a>: Building a fraud detection model
@@ -48,6 +46,8 @@
 from xml.dom import minidom
 import pandas as pd
 import networkx as nx
+import xgboost
+import sklearn
 
 xmldoc = minidom.parse('./DFF_Ruleset.dmn')
 itemlist = xmldoc.getElementsByTagName('dmn:decision')
@@ -200,10 +200,10 @@ class DFF_Model(mlflow.pyfunc.PythonModel):
 # DBTITLE 1,Include 3rd party dependencies
 # we may have to store additional libraries such as networkx and pandasql
 conda_env = mlflow.pyfunc.get_default_conda_env()
-conda_env['dependencies'][2]['pip'] += ['networkx==2.4']
-conda_env['dependencies'][2]['pip'] += ['pandasql==0.7.3']
-conda_env['dependencies'][2]['pip'] += ['xgboost']
-conda_env['dependencies'][2]['pip'] += ['sklearn']
+conda_env['dependencies'][2]['pip'] += [f'networkx==2.4']
+conda_env['dependencies'][2]['pip'] += [f'pandasql==0.7.3']
+conda_env['dependencies'][2]['pip'] += [f'xgboost=={xgboost.__version__}']
+conda_env['dependencies'][2]['pip'] += [f'scikit-learn=={sklearn.__version__}']
 conda_env
 
 # COMMAND ----------
