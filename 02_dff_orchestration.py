@@ -231,6 +231,18 @@ version = result.version
 # COMMAND ----------
 
 # DBTITLE 1,Register model to staging
+# archive any staging versions of the model from prior runs
+for mv in client.search_model_versions("name='{0}'".format(model_name)):
+  
+    # if model with this name is marked staging
+    if mv.current_stage.lower() == 'staging':
+      # mark is as archived
+      client.transition_model_version_stage(
+        name=model_name,
+        version=mv.version,
+        stage='archived'
+        )
+      
 client.transition_model_version_stage(
   name=model_name,
   version=version,
