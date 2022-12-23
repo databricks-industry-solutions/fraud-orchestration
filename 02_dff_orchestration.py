@@ -311,14 +311,14 @@ def score_model(dataset: pd.DataFrame):
   token = dbutils.notebook.entry_point.getDbutils().notebook().getContext().apiToken().getOrElse(None)
   url = 'https://e2-demo-field-eng.cloud.databricks.com/model/{0}/Staging/invocations'.format(model_name) # update to the url of your own workspace
   headers = {'Authorization': f'Bearer {token}'}
-  data_json = dataset.to_dict(orient='split')
+  data_json = {"dataframe_split": dataset.to_dict(orient='split')}
   response = requests.request(method='POST', headers=headers, url=url, json=data_json)
   if response.status_code != 200:
     raise Exception(f'Request failed with status {response.status_code}, {response.text}')
   return response.json()
 
 try:
-  decision = score_model(pdf)[0]['0']
+  decision = score_model(pdf)['predictions'][0]['0']
   if (decision is None ):
     displayHTML("<h3>VALID TRANSACTION</h3>")
   else:
