@@ -15,8 +15,6 @@
 # MAGIC 
 # MAGIC The financial service industry (FSI) is rushing towards transformational change to support new channels and services, delivering transactional features and facilitating payments through new digital channels to remain competitive. Unfortunately, the speed and convenience that these capabilities afford is a benefit to consumers and fraudsters alike. Building a fraud framework often goes beyond just creating a highly accurate machine learning model due ever changing landscape and customer expectation. Oftentimes it involves a complex decision science setup which combines rules engine with a need for a robust and scalable machine learning platform. In this series of notebook, we'll be demonstrating how `Delta Lake`, `MLFlow` and a unified analytics platform can help organisations combat fraud more efficiently
 # MAGIC 
-# MAGIC This series of notebook is also available at https://www.databricks.com/solutions/accelerators/fraud-detection and https://github.com/databricks-industry-solutions/fraud-orchestration
-# MAGIC 
 # MAGIC ---
 # MAGIC + <a href="$./01_dff_model">STAGE1</a>: Integrating rule based with ML
 # MAGIC + <a href="$./02_dff_orchestration">STAGE2</a>: Building a fraud detection model
@@ -48,6 +46,8 @@
 from xml.dom import minidom
 import pandas as pd
 import networkx as nx
+import xgboost
+import sklearn
 
 xmldoc = minidom.parse('./DFF_Ruleset.dmn')
 itemlist = xmldoc.getElementsByTagName('dmn:decision')
@@ -200,10 +200,10 @@ class DFF_Model(mlflow.pyfunc.PythonModel):
 # DBTITLE 1,Include 3rd party dependencies
 # we may have to store additional libraries such as networkx and pandasql
 conda_env = mlflow.pyfunc.get_default_conda_env()
-conda_env['dependencies'][2]['pip'] += ['networkx==2.4']
-conda_env['dependencies'][2]['pip'] += ['pandasql==0.7.3']
-conda_env['dependencies'][2]['pip'] += ['xgboost']
-conda_env['dependencies'][2]['pip'] += ['sklearn']
+conda_env['dependencies'][2]['pip'] += [f'networkx==2.4']
+conda_env['dependencies'][2]['pip'] += [f'pandasql==0.7.3']
+conda_env['dependencies'][2]['pip'] += [f'xgboost=={xgboost.__version__}']
+conda_env['dependencies'][2]['pip'] += [f'scikit-learn=={sklearn.__version__}']
 conda_env
 
 # COMMAND ----------
@@ -231,6 +231,18 @@ version = result.version
 # COMMAND ----------
 
 # DBTITLE 1,Register model to staging
+# archive any staging versions of the model from prior runs
+for mv in client.search_model_versions("name='{0}'".format(model_name)):
+  
+    # if model with this name is marked staging
+    if mv.current_stage.lower() == 'staging':
+      # mark is as archived
+      client.transition_model_version_stage(
+        name=model_name,
+        version=mv.version,
+        stage='archived'
+        )
+      
 client.transition_model_version_stage(
   name=model_name,
   version=version,
@@ -311,14 +323,14 @@ def score_model(dataset: pd.DataFrame):
   token = dbutils.notebook.entry_point.getDbutils().notebook().getContext().apiToken().getOrElse(None)
   url = 'https://e2-demo-field-eng.cloud.databricks.com/model/{0}/Staging/invocations'.format(model_name) # update to the url of your own workspace
   headers = {'Authorization': f'Bearer {token}'}
-  data_json = dataset.to_dict(orient='split')
+  data_json = {"dataframe_split": dataset.to_dict(orient='split')}
   response = requests.request(method='POST', headers=headers, url=url, json=data_json)
   if response.status_code != 200:
     raise Exception(f'Request failed with status {response.status_code}, {response.text}')
   return response.json()
 
 try:
-  decision = score_model(pdf)[0]['0']
+  decision = score_model(pdf)['predictions'][0]['0']
   if (decision is None ):
     displayHTML("<h3>VALID TRANSACTION</h3>")
   else:
