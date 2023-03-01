@@ -293,7 +293,7 @@ model = mlflow.pyfunc.load_model("runs:/{}/model".format(run_id))
 decision = model.predict(pdf).iloc[0]
 
 # Visualize our rule set and which one was triggered (if any)
-def toGraphViz_tiggered(g):
+def toGraphViz_triggered(g):
   dot = Digraph(comment='The Fraud Engine', format='svg', filename='/tmp/dff_triggered')
   atts = nx.get_node_attributes(G, 'decision')
   for node in atts:
@@ -306,7 +306,7 @@ def toGraphViz_tiggered(g):
     dot.edge(edge[0], edge[1])
   return dot
 
-dot = toGraphViz_tiggered(G)
+dot = toGraphViz_triggered(G)
 dot.render()
 displayHTML(dot.pipe().decode('utf-8'))
 
