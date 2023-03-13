@@ -27,12 +27,11 @@
 # COMMAND ----------
 
 # DBTITLE 1,Install binaries for graphviz
-# MAGIC %sh sudo apt-get install graphviz libgraphviz-dev pkg-config -y
+# MAGIC %sh -e sudo apt-get install graphviz libgraphviz-dev pkg-config -y
 
 # COMMAND ----------
 
-# DBTITLE 1,Install python libraries
-# MAGIC %pip install networkx==2.4 pandasql==0.7.3 graphviz pygraphviz pydot
+# MAGIC %pip install networkx==2.4 pandasql==0.7.3 graphviz==0.16 sqlalchemy==1.4.46 pygraphviz==1.7 pydot==1.4.2
 
 # COMMAND ----------
 
