@@ -186,7 +186,7 @@ def fit(X, y):
 # COMMAND ----------
 
 # MAGIC %md 
-# MAGIC Our input dataset has several fields which will be used for rule based modeling and machine learning. In this notebook we will rely on our machine learning model to identify important features that are effective at predicting fraud. Let's take a look into descriptions of these features to understand our downstream modeling and intrepretability results.
+# MAGIC Our input dataset has several fields which will be used for rule based modeling and machine learning. In this notebook we will rely on our machine learning model to identify important features that are effective at predicting fraud. Let's take a look into descriptions of these features to understand our downstream modeling and interpretability results.
 # MAGIC <br>
 # MAGIC <br>
 # MAGIC * LAST_ADR_CHNG_DUR     - Duration in days since the last address change on the account.
@@ -314,7 +314,7 @@ client.transition_model_version_stage(
 # COMMAND ----------
 
 # MAGIC %md 
-# MAGIC After running SHAP on model we can see how some of the features such  duration since address change, trasaction amount and available cash in the account were proved to be most important. While this is purely machine learning driven approach, we will look at ways to improve customer satisfaction with rule based modeling based vs really totally on ML based approach.
+# MAGIC After running SHAP on model we can see how some of the features such  duration since address change, transaction amount and available cash in the account were proved to be most important. While this is purely machine learning driven approach, we will look at ways to improve customer satisfaction with rule based modeling based vs really totally on ML based approach.
 
 # COMMAND ----------
 
