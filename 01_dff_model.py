@@ -44,7 +44,9 @@ import sklearn
 
 # COMMAND ----------
 
+# DBTITLE 1,Initiate data folder
 # MAGIC %sh 
+# MAGIC rm -r /dbfs/tmp/dff/
 # MAGIC mkdir -p /dbfs/tmp/dff/
 # MAGIC cp Fraud_final-1.csv /dbfs/tmp/dff/Fraud_final-1.csv
 
@@ -393,7 +395,7 @@ on t.id = s.shap_v_id""").write.format("delta").option('overwriteSchema', 'true'
 # MAGIC | networkx                               | Graph toolkit           | BSD        | https://github.com/networkx                         |
 # MAGIC | xgboost                                | Gradient Boosting lib.  | Apache2    | https://github.com/dmlc/xgboost                     |
 # MAGIC | graphviz                               | Network visualization   | MIT        | https://github.com/xflr6/graphviz                   |
-# MAGIC | pandasql                               | SQL syntax on pandas    | Yhat, Inc  | https://github.com/yhat/pandasql/                   |
+# MAGIC | pandasql                               | SQL syntax on pandas    | MIT  | https://github.com/yhat/pandasql/                   |
 # MAGIC | pydot                                  | Network visualization   | MIT        | https://github.com/pydot/pydot                      |
 # MAGIC | pygraphviz                             | Network visualization   | BSD        | https://pygraphviz.github.io/                       |
 

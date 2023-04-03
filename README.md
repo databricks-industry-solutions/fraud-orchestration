@@ -24,6 +24,6 @@ ___
 | networkx                               | Graph toolkit           | BSD        | https://github.com/networkx                         |
 | xgboost                                | Gradient Boosting lib.  | Apache2    | https://github.com/dmlc/xgboost                     |
 | graphviz                               | Network visualization   | MIT        | https://github.com/xflr6/graphviz                   |
-| pandasql                               | SQL syntax on pandas    | Yhat, Inc  | https://github.com/yhat/pandasql/                   |
+| pandasql                               | SQL syntax on pandas    | MIT  | https://github.com/yhat/pandasql/                   |
 | pydot                                  | Network visualization   | MIT        | https://github.com/pydot/pydot                      |
 | pygraphviz                             | Network visualization   | BSD        | https://pygraphviz.github.io/                       |
